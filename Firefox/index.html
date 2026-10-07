@@ -8,10 +8,12 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&family=Roboto:wght@300;400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&family=Roboto:wght@300;400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <style id="custom-css-style"></style>
   <script type="module" crossorigin src="./assets/main-zI7bL6cA.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/main-CP3JXm2C.css">
+    <link rel="stylesheet" crossorigin href="./assets/main-CP3JXm2C.css">
+    <link rel="stylesheet" href="./assets/perf-engine.css">
 </head>
 <body class="bg-black h-screen w-screen relative overflow-hidden text-white select-none">
     
@@ -271,7 +273,11 @@
                     <svg class="w-4 h-4 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg>
                     <span class="text-xs font-bold">Sfondi & Stile</span>
                 </button>
-                <button class="nav-item flex items-center gap-3 p-3 rounded-2xl hover:bg-white/10 transition-all w-full text-left opacity-60 cursor-pointer" data-tab="widgets">
+                                <button class="nav-item flex items-center gap-3 p-3 rounded-2xl hover:bg-white/10 transition-all w-full text-left opacity-80 cursor-pointer" data-tab="performance">
+                    <svg class="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>
+                    <span class="text-xs font-bold">Prestazioni PC ⚡</span>
+                </button>
+<button class="nav-item flex items-center gap-3 p-3 rounded-2xl hover:bg-white/10 transition-all w-full text-left opacity-60 cursor-pointer" data-tab="widgets">
                     <svg class="w-4 h-4 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg>
                     <span class="text-xs font-bold">Widget & Layout</span>
                 </button>
@@ -1013,7 +1019,58 @@
                         
                     </div>
                 </section>
-            </main>
+            
+                <!-- Sezione Prestazioni & Ottimizzazione PC -->
+                <section id="tab-performance" class="tab-content hidden">
+                    <h2 class="settings-header">Prestazioni & Ottimizzazione PC</h2>
+                    <div class="space-y-6">
+                        <div class="bg-emerald-950/30 border border-emerald-500/30 p-6 rounded-3xl space-y-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-extrabold text-emerald-400 uppercase tracking-wider">Preset Prestazioni Hardware</h3>
+                                    <p class="text-xs text-white/60">Scegli il profilo ideale per il tuo computer per eliminare qualsiasi calo di FPS.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                                <button type="button" class="preset-perf-btn flex flex-col items-center p-5 rounded-2xl border transition-all cursor-pointer text-center" data-preset="eco">
+                                    <span class="text-2xl mb-1">🍃</span>
+                                    <span class="text-xs font-black uppercase text-emerald-300">Eco / PC Debole</span>
+                                    <span class="text-[10px] text-white/50 mt-1">Disattiva blur pesanti e shader (60 FPS fluidi garantiti)</span>
+                                </button>
+                                
+                                <button type="button" class="preset-perf-btn flex flex-col items-center p-5 rounded-2xl border transition-all cursor-pointer text-center" data-preset="balanced">
+                                    <span class="text-2xl mb-1">⚖️</span>
+                                    <span class="text-xs font-black uppercase text-cyan-300">Bilanciato</span>
+                                    <span class="text-[10px] text-white/50 mt-1">Per portatili standard. Blur ridotto, senza shader continui.</span>
+                                </button>
+                                
+                                <button type="button" class="preset-perf-btn flex flex-col items-center p-5 rounded-2xl border transition-all cursor-pointer text-center" data-preset="ultra">
+                                    <span class="text-2xl mb-1">🚀</span>
+                                    <span class="text-xs font-black uppercase text-purple-300">Grafica Alta</span>
+                                    <span class="text-[10px] text-white/50 mt-1">Tutti gli effetti attivi (consigliato per PC con scheda video).</span>
+                                </button>
+                            </div>
+
+                            <div class="p-4 bg-black/40 rounded-2xl border border-white/10 mt-3">
+                                <p id="perf-preset-desc" class="text-xs text-emerald-200/90 font-medium"></p>
+                            </div>
+                        </div>
+
+                        <div class="bg-white/5 border border-white/10 p-5 rounded-3xl space-y-3">
+                            <h4 class="text-xs font-bold text-white/80 uppercase">Cosa fa la modalità Eco per PC deboli?</h4>
+                            <ul class="text-xs text-white/60 space-y-2 list-disc list-inside">
+                                <li>Elimina i filtri <code>backdrop-filter: blur</code> che sovraccaricano la GPU integrata Intel/AMD.</li>
+                                <li>Disattiva il canvas WebGL in background eliminando il carico di rendering a tutto schermo.</li>
+                                <li>Ferma i calcoli del cursore ad ogni movimento del mouse, evitando il drop a 10 FPS.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+</main>
         </div>
     </div>
 
@@ -1207,7 +1264,9 @@
             </div>
         </footer>
     </div>
-
+
+
+    <script src="./assets/perf-engine.js"></script>
 </body>
 </html>
 

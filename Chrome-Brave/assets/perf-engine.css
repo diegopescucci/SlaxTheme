@@ -1,0 +1,89 @@
+/* Slax Performance Presets & Low-Spec PC Optimization Engine */
+
+/* 1. Modalità Ultra Performance / Eco (Per PC deboli, vecchi o senza GPU dedicata) */
+body.perf-eco {
+    --glass-blur: 0px !important;
+}
+
+body.perf-eco *,
+body.perf-eco *::before,
+body.perf-eco *::after {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+}
+
+/* Sostituisci i backdrop blur pesanti con solidi neri eleganti a zero impatto GPU */
+body.perf-eco .glass-dock,
+body.perf-eco .modal-content,
+body.perf-eco #spotify-player,
+body.perf-eco .mini-track-card,
+body.perf-eco #weather-widget,
+body.perf-eco #settings-trigger,
+body.perf-eco #shortcuts-dock-wrapper,
+body.perf-eco .search-container,
+body.perf-eco #dual-clock,
+body.perf-eco .search-suggestions {
+    background-color: rgba(13, 14, 22, 0.94) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+
+/* Spegni completamente i motori WebGL e orbs pesanti in background */
+body.perf-eco #dashboard-polar-canvas,
+body.perf-eco #dashboard-music-palette,
+body.perf-eco .palette-fluid-layer,
+body.perf-eco .palette-orb,
+body.perf-eco .single-photo-distort,
+body.perf-eco #dashboard-art-layer,
+body.perf-eco #aura-cursor {
+    display: none !important;
+    animation: none !important;
+    transform: none !important;
+}
+
+/* Disattiva cursore custom su eco per risparmiare rAF e mousemove */
+body.perf-eco #cursor-dot,
+body.perf-eco #cursor-ring {
+    display: none !important;
+}
+body.perf-eco {
+    cursor: auto !important;
+}
+body.perf-eco * {
+    cursor: auto !important;
+}
+body.perf-eco button, 
+body.perf-eco a, 
+body.perf-eco input, 
+body.perf-eco select {
+    cursor: pointer !important;
+}
+
+/* 2. Modalità Bilanciata (PC Medi, portatili standard) */
+body.perf-balanced {
+    --glass-blur: 8px !important;
+}
+
+body.perf-balanced #dashboard-polar-canvas {
+    display: none !important;
+}
+
+body.perf-balanced #aura-cursor {
+    display: none !important;
+}
+
+body.perf-balanced .palette-orb {
+    animation-duration: 25s !important;
+    filter: blur(40px) !important;
+}
+
+/* Accelera rendering su layer compositi */
+#clock-widget,
+#search-unit,
+#shortcuts-dock-wrapper,
+header.fixed,
+#spotify-player {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
