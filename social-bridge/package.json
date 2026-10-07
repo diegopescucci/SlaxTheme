@@ -1,0 +1,8 @@
+{
+  "name": "slax-social-bridge",
+  "private": true,
+  "type": "module",
+  "scripts": {"start": "node server.mjs", "test": "node test.mjs"},
+  "dependencies": {"instatouch": "2.3.20", "tiktok-scraper": "1.4.35"},
+  "overrides": {"canvas": "3.2.3"}
+}

@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slax</title>
+    <link rel="icon" type="image/png" href="./assets/icon-CHUMe7_6.png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&family=Roboto:wght@300;400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style id="custom-css-style"></style>
+  <script type="module" crossorigin src="./assets/main-zI7bL6cA.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/main-CP3JXm2C.css">
+</head>
+<body class="bg-black h-screen w-screen relative overflow-hidden text-white select-none">
+    
+    <!-- Aura Cursor Glow (#10) -->
+    <div id="aura-cursor"></div>
+    <!-- Custom Cursor Dot -->
+    <div id="cursor-dot"></div>
+    <div id="cursor-ring"></div>
+    <!-- Dynamic Background Engine -->
+    <div id="dashboard-music-palette" aria-hidden="true"><div id="dashboard-art-layer" class="single-photo-distort"></div><div class="palette-fluid-layer"><div class="palette-orb orb-1"></div><div class="palette-orb orb-2"></div><div class="palette-orb orb-3"></div><div class="palette-orb orb-4"></div><div class="palette-orb orb-5"></div></div></div>
+    <div id="bg-overlay" class="fixed inset-0 z-[-1] transition-all duration-1000"><video id="dashboard-motion-bg" class="motion-cover-bg" loop muted playsinline aria-hidden="true"></video></div>
+    <!-- Dashboard ambient fluid bg (same WebGL as immersion player, but always-on subtle) -->
+    <canvas id="dashboard-polar-canvas" class="fixed inset-0 w-full h-full pointer-events-none z-[0]"></canvas>
+
+    <!-- Top Navigation Dock -->
+    <header class="fixed top-6 left-8 right-8 flex justify-between items-center z-50 pointer-events-auto gap-4">
+        <!-- Settings & Weather (Left) -->
+        <div class="flex items-center gap-2.5 shrink-0">
+            <button id="settings-trigger" class="w-10 h-10 glass-dock rounded-full flex items-center justify-center transition-all cursor-pointer shadow-lg btn-anim hover:bg-white/15 border border-white/10 hover:scale-105" title="Impostazioni Dashboard">
+                <svg class="w-4.5 h-4.5 opacity-90 hover:opacity-100 transition-opacity" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            </button>
+
+            <!-- Extended Weather Glass Widget -->
+            <div id="weather-widget" class="h-10 glass-dock px-4 rounded-full flex items-center gap-3 shadow-lg border border-white/10 hover:border-white/20 transition-all">
+                <div id="weather-sec-main" class="flex items-center gap-2">
+                    <span id="weather-icon" class="text-base">☀️</span>
+                    <span id="weather-temp" class="text-xs font-extrabold tracking-tight">--°C</span>
+                </div>
+                <div id="weather-divider-1" class="h-3.5 w-px bg-white/10"></div>
+                <div id="weather-sec-text" class="flex flex-col">
+                    <span id="weather-city" class="text-[11px] font-extrabold tracking-wide uppercase text-white/90 leading-tight">Roma</span>
+                    <span id="weather-condition" class="text-[8.5px] opacity-60 font-semibold uppercase tracking-wider leading-none">Caricamento...</span>
+                </div>
+                <div id="weather-divider-2" class="weather-extras h-3.5 w-px bg-white/10"></div>
+                <!-- Extra Weather Metrics -->
+                <div id="weather-sec-extra" class="weather-extras flex items-center gap-2.5 text-[9.5px] opacity-80 font-mono">
+                    <span id="weather-humidity" title="Umidità Relativa">💧 --%</span>
+                    <span id="weather-wind" title="Velocità Vento">💨 -- km/h</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Center / Right: Social Tracker Dock -->
+        <div id="social-watch" class="hidden items-center gap-2.5">
+            <div id="yt-stat" class="hidden items-center gap-2.5 glass-dock px-3.5 h-10 rounded-full border border-white/10 shadow-lg hover:bg-white/10 transition-all cursor-pointer">
+                <svg class="w-4 h-4 text-red-500 shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg> 
+                <span id="yt-subs" class="text-xs font-bold text-white tabular-nums">--</span>
+            </div>
+            
+            <div id="ig-stat" role="link" tabindex="0" aria-label="Apri profilo Instagram" class="flex items-center gap-3 glass-dock px-3.5 h-10 rounded-full border border-white/10 shadow-lg hover:bg-white/10 transition-all cursor-pointer" title="Instagram">
+                <div class="flex items-center gap-2 pr-2.5 border-r border-white/10">
+                    <svg class="w-4 h-4 text-pink-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="url(#instagram-brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <defs><linearGradient id="instagram-brand" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#feda75"/><stop offset=".5" stop-color="#fa7e1e"/><stop offset=".75" stop-color="#d62976"/><stop offset="1" stop-color="#962fbf"/></linearGradient></defs>
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                    </svg>
+                    <span id="ig-username-display" class="text-xs font-extrabold tracking-wide">Instagram</span>
+                    <span id="ig-sync-dot" class="w-2 h-2 rounded-full bg-amber-400 animate-pulse" title="Stato sincronizzazione Instagram"></span>
+                </div>
+
+                <!-- Followers Icon & Count -->
+                <div class="flex items-center gap-1.5" title="Followers">
+                    <svg class="w-3.5 h-3.5 text-white/50 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                    <span id="ig-followers" class="text-xs font-bold text-white tabular-nums tracking-tight">—</span>
+                    <span id="ig-followers-delta" class="hidden px-1.5 py-0.5 rounded-full text-[9px] font-black tracking-wide bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"></span>
+                </div>
+
+                <div class="h-3.5 w-px bg-white/10"></div>
+
+                <!-- Seguiti (Following) Icon & Count -->
+                <div class="ig-following-block flex items-center gap-1.5" title="Profili seguiti">
+                    <svg class="w-3.5 h-3.5 text-white/50 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <line x1="19" y1="8" x2="19" y2="14"/>
+                        <line x1="22" y1="11" x2="16" y2="11"/>
+                    </svg>
+                    <span id="ig-following" class="text-xs font-bold text-white tabular-nums tracking-tight">1.152</span>
+                </div>
+
+                <div class="ig-following-block h-3.5 w-px bg-white/10"></div>
+
+                <!-- Posts Icon & Count -->
+                <div class="ig-posts-block flex items-center gap-1.5" title="Post pubblicati">
+                    <svg class="w-3.5 h-3.5 text-white/50 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+                        <rect x="14" y="3" width="7" height="7" rx="1.5"/>
+                        <rect x="14" y="14" width="7" height="7" rx="1.5"/>
+                        <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+                    </svg>
+                    <span id="ig-posts" class="text-xs font-bold text-white tabular-nums tracking-tight">0</span>
+                </div>
+            </div>
+
+            <!-- TikTok Widget -->
+            <div id="tt-stat" role="link" tabindex="0" aria-label="Apri profilo TikTok" class="flex items-center gap-3 glass-dock px-3.5 h-10 rounded-full border border-white/10 shadow-lg hover:bg-white/10 transition-all cursor-pointer" title="TikTok: @ - Clicca per aprire il profilo">
+                <div class="flex items-center gap-2 pr-2.5 border-r border-white/10">
+                    <svg class="social-app-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 3v12a4.5 4.5 0 1 1-4-4.47" stroke="#25f4ee" stroke-width="3.2" stroke-linecap="round" transform="translate(-.6 .5)"/><path d="M14 3c.5 3 2.2 4.5 5 4.7M14 3v12a4.5 4.5 0 1 1-4-4.47" stroke="#fe2c55" stroke-width="3.2" stroke-linecap="round" transform="translate(.6 -.3)"/><path d="M14 3c.5 3 2.2 4.5 5 4.7M14 3v12a4.5 4.5 0 1 1-4-4.47" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg> 
+                    <span id="tt-username-display" class="text-xs bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent font-extrabold tracking-wide">@</span>
+                    <span id="tt-sync-dot" class="w-2 h-2 rounded-full bg-amber-400 animate-pulse" title="Stato sincronizzazione TikTok"></span>
+                </div>
+                <div class="flex items-center gap-1.5" title="Followers TikTok">
+                    <svg class="w-3.5 h-3.5 text-white/50 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                    <span id="tt-followers" class="text-xs font-bold text-white tabular-nums tracking-tight">—</span>
+                </div>
+            </div>
+        </div>
+
+    </header>
+
+    <!-- Central Stage Workspace -->
+    <main id="central-stage" class="flex flex-col items-center h-full w-full max-w-5xl mx-auto justify-center relative z-10 px-4 flex-1">
+        <!-- Floating Seamless Clock Display (No box background) -->
+        <div id="clock-widget" class="flex flex-col items-center mb-6 relative transition-all duration-500">
+            <!-- Seconds Floating Badge -->
+            <div id="clock-seconds-badge" class="absolute -top-6 right-2 px-3 py-1 bg-white/10 backdrop-blur-xl border border-white/10 rounded-full text-[11px] font-mono font-bold text-pink-400 tracking-wider shadow-sm hidden">
+                <span id="clock-seconds-val">00</span>s
+            </div>
+
+            <!-- Main Time Display (Seamlessly Floating) -->
+            <div id="clock-time" class="text-[104px] md:text-[120px] font-black tracking-tighter leading-none mb-2 drop-shadow-[0_8px_32px_rgba(0,0,0,0.5)] text-white select-none">00:00</div>
+            
+            <!-- Greeting & Date (Clickable to open calendar) -->
+            <div id="clock-date" class="text-xs md:text-sm font-extrabold tracking-[0.25em] uppercase text-white/90 flex items-center justify-center gap-2 flex-wrap drop-shadow-[0_2px_10px_rgba(0,0,0,0.4)]">
+                <!-- JS rendered greeting + date -->
+            </div>
+            <!-- Dual Timezone Clock -->
+            <div id="dual-clock" class="mt-2 items-center gap-3 glass-dock rounded-full px-4 py-1.5 border border-white/10">
+                <div class="flex items-center gap-1.5">
+                    <span id="dual-clock-label" class="text-[9px] uppercase font-bold text-white/40 tracking-wider">NYC</span>
+                    <span id="dual-clock-time" class="text-xs font-mono font-black text-white/80">--:--</span>
+                </div>
+                <div class="h-3 w-px bg-white/15"></div>
+                <div class="flex items-center gap-1.5">
+                    <span id="dual-clock-label2" class="text-[9px] uppercase font-bold text-white/40 tracking-wider">TYO</span>
+                    <span id="dual-clock-time2" class="text-xs font-mono font-black text-white/80">--:--</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Bar Unit -->
+        <div id="search-unit" class="search-container px-4">
+            <form id="search-form" action="https://www.google.com/search" method="get" class="relative group">
+                <input type="text" name="q" class="search-input" placeholder="Cerca sul Web..." autocomplete="off" autofocus>
+                <div class="search-icon-wrapper absolute left-8 top-1/2 -translate-y-1/2 opacity-50 group-hover:opacity-100 transition-all pointer-events-none">
+                    <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                </div>
+            </form>
+        </div>
+
+        <!-- Floating Glass Dock for Shortcuts (Seamless unboxed container) -->
+        <div id="shortcuts-dock-wrapper" class="flex items-center justify-center gap-6 mt-6">
+            <div id="shortcuts-container" class="flex items-center justify-center gap-6 flex-wrap">
+                <!-- Dynamic Shortcuts -->
+            </div>
+        </div>
+
+        <!-- Tasks Floating View -->
+        <div id="dashboard-tasks" class="fixed right-12 bottom-12 flex flex-col items-end gap-3 z-40">
+            <!-- Floating tasks -->
+        </div>
+
+        
+        
+
+        <!-- Habit Tracker Widget -->
+        
+
+
+        <!-- Daily Quote Bar (top center) -->
+        <div id="quote-widget" class="hidden fixed top-6 left-1/2 -translate-x-1/2 z-40 max-w-md w-full px-4">
+            <div class="glass-dock rounded-2xl px-5 py-3 border border-white/10 shadow-lg flex items-center gap-3">
+                <span class="text-lg shrink-0">💬</span>
+                <div class="flex-1 min-w-0">
+                    <p id="quote-text" class="text-xs font-semibold text-white/80 italic leading-relaxed">Caricamento...</p>
+                    <p id="quote-source" class="text-[10px] text-white/40 mt-1"></p><p id="quote-author" class="text-[10px] font-bold text-white/40 mt-0.5">—</p>
+                </div>
+                <button id="quote-refresh" class="shrink-0 text-white/30 hover:text-white/70 transition-colors cursor-pointer">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Crypto Ticker -->
+        <div id="crypto-widget" class="hidden fixed top-6 right-64 z-40">
+            <div class="glass-dock rounded-2xl px-4 py-2.5 border border-white/10 shadow-lg">
+                <div id="crypto-ticker" class="flex items-center gap-4 text-xs font-bold">
+                    <span class="text-white/30 text-[10px] uppercase tracking-wider">₿</span>
+                </div>
+            </div>
+        </div>
+
+        
+        
+
+        
+        
+    </main>
+
+    <!-- Player Mini Card (VisionOS Glass Card matching reference design) -->
+    <div id="spotify-player" class="fixed bottom-8 left-8 hidden opacity-0 pointer-events-none transition-all duration-700 z-50 cursor-pointer group" aria-hidden="true" role="button" tabindex="0" aria-label="Apri player completo" title="Apri player completo">
+        <div class="mini-track-card">
+            
+            <!-- Artwork Container (Rounded Square Cover) -->
+            <div id="spotify-art" title="Apri player completo">
+                <div id="spotify-art-placeholder">
+                    <svg class="w-6 h-6 text-white/80" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+                    </svg>
+                </div>
+                <img id="spotify-art-img" alt="Copertina del brano" style="display:none;" />
+                <video id="spotify-art-video" autoplay loop muted playsinline></video>
+            </div>
+            
+            <!-- Compact track details; playback controls live in the full player. -->
+            <div class="mini-player-details">
+                <div class="mini-player-topline"><span>IN ASCOLTO</span><span class="mini-player-open-cue" aria-hidden="true">Apri <svg viewBox="0 0 20 20" fill="none"><path d="M4 10h11m-4-4 4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+                <div class="mini-player-meta">
+                    <div id="spotify-title" title="In riproduzione da Spotify">Spotify</div>
+                    <div id="spotify-artist">Connetti il tuo account</div>
+                </div>
+                <div class="mini-player-timeline">
+                    <div id="mini-progress-container" role="slider" tabindex="0" aria-label="Posizione brano nel player compatto" title="Trascina o clicca per cercare">
+                        <div id="spotify-progress" style="width: 0%"></div>
+                    </div>
+                    <span id="player-time-badge" title="Tempo brano">0:00 / 0:00</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slax Settings Modal (Apple VisionOS Glass) -->
+    <div id="settings-modal" class="fixed inset-0 hidden flex items-center justify-center z-[1000]">
+        <div class="modal-content">
+            
+            <aside class="settings-sidebar">
+                <div class="mb-8 flex items-center gap-3 px-2">
+                    <div class="w-9 h-9 bg-white/15 border border-white/20 rounded-xl flex items-center justify-center text-white shadow-md">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    </div>
+                    <span class="font-extrabold tracking-wider text-sm uppercase text-white/90">Impostazioni</span>
+                </div>
+                
+                <nav class="settings-nav" aria-label="Impostazioni">
+                <button class="nav-item active flex items-center gap-3 p-3 rounded-2xl hover:bg-white/10 transition-all w-full text-left cursor-pointer" data-tab="graphic">
+                    <svg class="w-4 h-4 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg>
+                    <span class="text-xs font-bold">Sfondi & Stile</span>
+                </button>
+                <button class="nav-item flex items-center gap-3 p-3 rounded-2xl hover:bg-white/10 transition-all w-full text-left opacity-60 cursor-pointer" data-tab="widgets">
+                    <svg class="w-4 h-4 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg>
+                    <span class="text-xs font-bold">Widget & Layout</span>
+                </button>
+                <button class="nav-item flex items-center gap-3 p-3 rounded-2xl hover:bg-white/10 transition-all w-full text-left opacity-60 cursor-pointer" data-tab="integration">
+                    <svg class="w-4 h-4 text-pink-400" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+                    <span class="text-xs font-bold">Musica & Streaming</span>
+                </button>
+                <button class="nav-item nav-item-upcoming flex items-center gap-3 p-3 rounded-2xl w-full text-left" data-tab="social" type="button" disabled aria-disabled="true" title="Social Tracker: prossimamente">
+                    <svg class="w-4 h-4 text-pink-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    <span class="text-xs font-extrabold">Social Tracker <small class="upcoming-label">PROSSIMAMENTE</small></span>
+                </button>
+                <button class="nav-item flex items-center gap-3 p-3 rounded-2xl hover:bg-white/10 transition-all w-full text-left opacity-60 cursor-pointer" data-tab="shortcuts">
+                    <svg class="w-4 h-4 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                    <span class="text-xs font-bold">Scorciatoie</span>
+                </button>
+                <button class="nav-item flex items-center gap-3 p-3 rounded-2xl hover:bg-white/10 transition-all w-full text-left opacity-60 cursor-pointer" data-tab="backup">
+                    <svg class="w-4 h-4 text-rose-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    <span class="text-xs font-bold">Backup & Avanzate</span>
+                </button>
+
+                <button class="nav-item flex items-center gap-3 p-3 rounded-2xl hover:bg-white/10 transition-all w-full text-left opacity-60 cursor-pointer" data-tab="productivity">
+                    <svg class="w-4 h-4 text-orange-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    <span class="text-xs font-bold">Produttività & Extra</span>
+                </button>
+                </nav>
+
+                <div class="mt-auto pt-6 border-t border-white/10">
+                    <button id="close-settings" class="pill-save w-full py-3.5 px-6 rounded-full font-bold border border-white/30 hover:border-white/60 focus-visible:outline-2 focus-visible:outline-white/80 focus-visible:outline-offset-2 transition-all cursor-pointer text-xs uppercase tracking-wider" aria-label="Salva e chiudi impostazioni">Salva & Chiudi</button>
+                </div>
+            </aside>
+
+            <!-- Modal Main Area -->
+            <main class="settings-main">
+                <!-- 1. Sfondi & Tema -->
+                <section id="tab-graphic" class="tab-content block">
+                    <h2 class="settings-header">Sfondi & Stile Visivo</h2><div class="settings-player-card"><h3>Lingua dell’app</h3><label for="language-select">Lingua</label><select id="language-select"><option value="auto">Automatica</option><option value="it">Italiano</option><option value="en">English</option><option value="es">Español</option><option value="fr">Français</option><option value="de">Deutsch</option></select></div>
+                    <div class="space-y-8">
+                        <div>
+                            <label class="text-xs font-bold opacity-40 uppercase tracking-widest block mb-4">Modalità Sfondo</label>
+                            <div class="grid grid-cols-4 gap-4">
+                                <button class="mode-opt bg-white/5 p-5 rounded-2xl border border-white/10 hover:border-white/30 transition-all text-center text-xs font-bold cursor-pointer" data-mode="single">Colore Singolo</button>
+                                <button class="mode-opt bg-white/5 p-5 rounded-2xl border border-white/10 hover:border-white/30 transition-all text-center text-xs font-bold cursor-pointer" data-mode="gradient">Sfumatura</button>
+                                <button class="mode-opt bg-white/5 p-5 rounded-2xl border border-white/10 hover:border-white/30 transition-all text-center text-xs font-bold cursor-pointer" data-mode="cover">Sync with Cover</button>
+                                <button class="mode-opt bg-white/5 p-5 rounded-2xl border border-white/10 hover:border-white/30 transition-all text-center text-xs font-bold cursor-pointer" data-mode="image">Immagine</button>
+                            </div>
+                        </div>
+
+                        <!-- Randomizer & Nuova Scheda Engine -->
+                        <div class="bg-gradient-to-r from-purple-900/30 via-pink-900/20 to-indigo-900/30 border border-white/15 p-5 rounded-3xl space-y-4">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="text-lg">🎲</span>
+                                    <div>
+                                        <h3 class="text-xs font-extrabold uppercase tracking-wider text-pink-400">Randomizer Sfondo</h3>
+                                        <p class="text-[10px] text-white/50">Genera sfondi casuali estetici o randomizza ad ogni avvio</p>
+                                    </div>
+                                </div>
+                                <button id="randomize-bg-btn" class="bg-gradient-to-r from-purple-500/30 to-pink-500/30 hover:from-purple-500/40 hover:to-pink-500/40 text-pink-200 border border-pink-500/40 px-5 py-2.5 rounded-2xl font-bold text-xs transition-all cursor-pointer btn-anim active:scale-95 shadow-lg flex items-center gap-2">
+                                    <span>🎲 Randomizza Ora</span>
+                                </button>
+                            </div>
+                            <label class="flex items-center justify-between p-3.5 bg-black/40 rounded-2xl border border-white/10 cursor-pointer hover:bg-black/60 transition-all">
+                                <div>
+                                    <span class="text-xs font-bold block text-white/90">Randomizza ad ogni nuova pagina</span>
+                                    <span class="text-[9px] text-white/40">Sceglie automaticamente un look nuovo ogni volta che apri una scheda</span>
+                                </div>
+                                <input type="checkbox" id="randomize-on-open-toggle" class="w-4 h-4 accent-pink-400 cursor-pointer">
+                            </label>
+                        </div>
+
+                        <!-- Presets Salvati dall'Utente -->
+                        <div class="bg-white/5 border border-white/10 p-5 rounded-3xl space-y-4">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h3 class="text-xs font-extrabold uppercase tracking-wider text-cyan-400">I Miei Sfondi Salvati</h3>
+                                    <p class="text-[10px] text-white/40">Salva la combinazione attiva per riattivarla istantaneamente</p>
+                                </div>
+                                <button id="save-bg-preset-btn" class="bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/30 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer btn-anim flex items-center gap-1.5">
+                                    <span>💾 Salva Configurazione Attuale</span>
+                                </button>
+                            </div>
+                            <div id="saved-bg-presets-list" class="flex flex-wrap gap-2.5 min-h-[44px] items-center">
+                                <span class="text-[11px] text-white/30 italic">Nessun preset salvato ancora. Clicca su "Salva" per memorizzare il tuo sfondo preferito!</span>
+                            </div>
+                        </div>
+
+                        <!-- Sfumatura & Colori Builder Avanzato -->
+                        <div id="custom-builder" class="bg-white/[0.03] border border-white/10 p-6 rounded-3xl hidden space-y-5">
+                            <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                                <h3 class="text-xs font-extrabold uppercase tracking-wider text-purple-400">Controlli Personalizzati Sfondo</h3>
+                                <span id="builder-active-mode-label" class="text-[10px] font-mono text-white/40 uppercase">Configurazione Live</span>
+                            </div>
+
+                            <div id="single-picker-group" class="hidden flex items-center gap-4">
+                                <label class="text-[11px] font-bold opacity-60 uppercase">Colore Base</label>
+                                <input type="color" id="custom-color-picker" class="w-12 h-12 bg-transparent border-0 cursor-pointer rounded-xl">
+                            </div>
+
+                            <div id="gradient-picker-group" class="hidden space-y-4">
+                                <div class="grid grid-cols-3 gap-4">
+                                    <div>
+                                        <label class="text-[10px] font-bold block mb-2 opacity-50 uppercase">Angolo / Direzione</label>
+                                        <select id="grad-angle-select" class="w-full bg-black/40 p-3 rounded-xl border border-white/10 text-xs font-bold text-white cursor-pointer">
+                                            <option value="135deg">Diagonale 135°</option>
+                                            <option value="90deg">Verticale 90°</option>
+                                            <option value="180deg">Orizzontale 180°</option>
+                                            <option value="45deg">Diagonale 45°</option>
+                                            <option value="radial">Radiale (Centro)</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="text-[10px] font-bold block mb-2 opacity-50 uppercase">Colore Iniziale</label>
+                                        <div class="flex items-center gap-2">
+                                            <input type="color" id="grad-color-1" class="w-10 h-10 bg-transparent border-0 cursor-pointer">
+                                            <input type="text" id="grad-color-1-text" class="flex-1 bg-black/40 p-2.5 rounded-xl border border-white/10 text-[11px] font-mono text-white" placeholder="#0f172a">
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="text-[10px] font-bold block mb-2 opacity-50 uppercase">Colore Finale</label>
+                                        <div class="flex items-center gap-2">
+                                            <input type="color" id="grad-color-2" class="w-10 h-10 bg-transparent border-0 cursor-pointer">
+                                            <input type="text" id="grad-color-2-text" class="flex-1 bg-black/40 p-2.5 rounded-xl border border-white/10 text-[11px] font-mono text-white" placeholder="#1e1b4b">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="image-picker-group" class="hidden w-full space-y-4">
+                                <div>
+                                    <label class="text-[10px] font-bold block mb-2 opacity-50 uppercase">URL Immagine Sfondo</label>
+                                    <div class="flex gap-3">
+                                        <input type="text" id="bg-image-url" class="flex-1 bg-black/40 p-3.5 rounded-xl border border-white/10 text-xs font-mono" placeholder="https://images.unsplash.com/...">
+                                        <button id="apply-bg-url-btn" class="bg-white/10 px-5 py-2.5 rounded-xl font-bold hover:bg-white/20 transition-all text-xs cursor-pointer">Applica</button>
+                                    </div>
+                                </div>
+
+                                <!-- Improved File Upload Area -->
+                                <div>
+                                    <label class="text-[10px] font-bold block mb-2 opacity-50 uppercase">Carica File Immagine Locale (Migliorato)</label>
+                                    <div id="bg-dropzone" class="border-2 border-dashed border-white/15 hover:border-cyan-400/50 rounded-2xl p-5 text-center cursor-pointer transition-all bg-black/20 hover:bg-black/40">
+                                        <input type="file" id="bg-image-file" class="hidden" accept="image/*">
+                                        <div id="bg-dropzone-content" class="flex flex-col items-center justify-center gap-2">
+                                            <svg class="w-8 h-8 text-white/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                                            <span class="text-xs font-bold text-white/80">Clicca o trascina qui un'immagine</span>
+                                            <span class="text-[10px] text-white/40">PNG, JPG, WebP fino a 15MB</span>
+                                        </div>
+                                        <div id="bg-preview-card" class="hidden items-center justify-between gap-4">
+                                            <div class="flex items-center gap-3">
+                                                <img id="bg-preview-thumb" class="w-14 h-14 object-cover rounded-xl border border-white/20" alt="Preview">
+                                                <div class="text-left">
+                                                    <span id="bg-file-name" class="text-xs font-bold text-white block truncate max-w-[200px]">immagine.jpg</span>
+                                                    <span class="text-[10px] text-emerald-400 font-semibold">Caricata con successo</span>
+                                                </div>
+                                            </div>
+                                            <button id="remove-bg-image-btn" class="bg-red-500/20 hover:bg-red-500/30 text-red-300 border border-red-500/30 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer">Rimuovi Sfondo</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Personalizzazione Cursor Halo (Aura Glow) -->
+                        <div class="bg-white/5 border border-white/10 p-5 rounded-3xl space-y-4">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-base">✨</span>
+                                    <h3 class="text-xs font-extrabold uppercase tracking-wider text-pink-400">Cursore & Alone Luminoso</h3>
+                                </div>
+                                <div class="flex flex-wrap items-center justify-end gap-x-5 gap-y-2">
+                                    <label class="flex items-center gap-2 cursor-pointer">
+                                        <input type="checkbox" id="custom-cursor-toggle" class="w-4 h-4 accent-cyan-400 cursor-pointer" checked>
+                                        <span class="text-xs font-bold text-white/80">Cursore personalizzato</span>
+                                    </label>
+                                    <label class="flex items-center gap-2 cursor-pointer">
+                                        <input type="checkbox" id="aura-glow-toggle" class="w-4 h-4 accent-pink-400 cursor-pointer" checked>
+                                        <span class="text-xs font-bold text-white/80">Glow</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-3 gap-4">
+                                <div>
+                                    <label class="text-[10px] font-bold block mb-1.5 opacity-50 uppercase">Colore Alone</label>
+                                    <select id="aura-color-select" class="w-full bg-black/40 p-3 rounded-xl border border-white/10 text-xs font-bold text-white cursor-pointer">
+                                        <option value="violet-pink">💜 Violetto / Rosa</option>
+                                        <option value="cyan-blue">💙 Ciano / Blu</option>
+                                        <option value="amber-gold">💛 Oro / Ambra</option>
+                                        <option value="emerald-teal">💚 Smeraldo / Teal</option>
+                                        <option value="white-glow">🤍 Bianco Puro Soft</option>
+                                        <option value="custom">🎨 Personalizzato</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="text-[10px] font-bold block mb-1.5 opacity-50 uppercase">Dimensione Alone</label>
+                                    <input type="range" id="aura-size-slider" min="150" max="800" step="25" value="500" class="w-full accent-pink-400 cursor-pointer">
+                                    <div class="flex justify-between text-[9px] text-white/40 mt-1 font-mono"><span>Piccolo</span><span id="aura-size-val">500px</span><span>Ampio</span></div>
+                                </div>
+                                <div>
+                                    <label class="text-[10px] font-bold block mb-1.5 opacity-50 uppercase">Opacità Alone</label>
+                                    <input type="range" id="aura-opacity-slider" min="10" max="100" step="5" value="75" class="w-full accent-pink-400 cursor-pointer">
+                                    <div class="flex justify-between text-[9px] text-white/40 mt-1 font-mono"><span>Sublime</span><span id="aura-opacity-val">75%</span><span>Intenso</span></div>
+                                </div>
+                            </div>
+                            <div id="aura-custom-color-wrap" class="hidden items-center gap-3 pt-1">
+                                <label class="text-[10px] font-bold opacity-60 uppercase">Tinta Cursore Custom</label>
+                                <input type="color" id="aura-color-custom" value="#8b5cf6" class="w-10 h-10 bg-transparent border-0 cursor-pointer">
+                            </div>
+                        </div>
+
+                        <!-- Unsplash Wallpaper con Movimento e Sfumatura Custom -->
+                        <div class="bg-white/5 border border-white/10 p-5 rounded-3xl space-y-4">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-xs font-extrabold uppercase tracking-wider text-amber-400">📸 Unsplash Wallpaper & Effetti Immagine</h3>
+                                <button id="unsplash-refresh-btn" class="bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 px-4 py-2 rounded-xl font-bold text-xs transition-all cursor-pointer btn-anim">🔄 Nuovo Sfondo</button>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="text-[9px] font-bold text-white/40 uppercase block mb-1.5">Categoria</label>
+                                    <select id="unsplash-category" class="w-full bg-black/40 p-3 rounded-xl border border-white/10 text-xs font-bold text-white cursor-pointer">
+                                        <option value="">Disattivato</option>
+                                        <option value="nature">🌿 Nature</option>
+                                        <option value="cyberpunk">⚡ Cyberpunk</option>
+                                        <option value="architecture">🏛 Architecture</option>
+                                        <option value="space">🌌 Space</option>
+                                        <option value="minimal">◻ Minimal</option>
+                                        <option value="abstract">🎨 Abstract</option>
+                                        <option value="city">🌆 City</option>
+                                        <option value="ocean">🌊 Ocean</option>
+                                    </select>
+                                </div>
+                                <div class="flex items-center">
+                                    <label class="flex items-center justify-between p-3.5 bg-black/30 rounded-2xl border border-white/5 cursor-pointer hover:bg-black/50 transition-all w-full">
+                                        <div>
+                                            <span class="text-xs font-bold block">🌊 Movimento Immagine (Ken Burns)</span>
+                                            <span class="text-[9px] text-white/40">Zoom lento fluido cinematografico</span>
+                                        </div>
+                                        <input type="checkbox" id="unsplash-motion-toggle" class="w-4 h-4 accent-amber-400 cursor-pointer">
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 pt-1">
+                                <div>
+                                    <label class="text-[10px] font-bold block mb-1.5 opacity-50 uppercase">Oscuramento Sfumatura Overlay</label>
+                                    <input type="range" id="unsplash-overlay-slider" min="0" max="80" step="5" value="30" class="w-full accent-amber-400 cursor-pointer">
+                                    <div class="flex justify-between text-[9px] text-white/40 mt-1 font-mono"><span>Luminoso</span><span id="unsplash-overlay-val">30%</span><span>Scuro</span></div>
+                                </div>
+                                <div>
+                                    <label class="text-[10px] font-bold block mb-1.5 opacity-50 uppercase">Sfocatura Immagine (Blur)</label>
+                                    <input type="range" id="unsplash-blur-slider" min="0" max="25" step="1" value="0" class="w-full accent-amber-400 cursor-pointer">
+                                    <div class="flex justify-between text-[9px] text-white/40 mt-1 font-mono"><span>Nessuna</span><span id="unsplash-blur-val">0px</span><span>Alta</span></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tipografia e Sfocatura Vetro -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-white/5 border border-white/10 p-5 rounded-3xl space-y-2">
+                                <label class="text-[10px] font-bold opacity-50 uppercase tracking-wider block">Font Dashboard</label>
+                                <select id="font-family-select" class="w-full bg-black/40 p-3.5 rounded-xl border border-white/10 text-xs font-bold text-white cursor-pointer focus:outline-none focus:border-white/30">
+                                    <option value="System">Sistema</option>
+                                    <option value="Inter">Inter</option>
+                                    <option value="Outfit">Outfit</option>
+                                    <option value="Roboto">Roboto</option>
+                                    <option value="Space Grotesk">Space Grotesk</option>
+                                </select>
+                            </div>
+
+                            <div class="bg-white/5 border border-white/10 p-5 rounded-3xl space-y-2">
+                                <label class="text-[10px] font-bold opacity-50 uppercase tracking-wider block">Intensità Sfocatura Vetro (Glass Blur)</label>
+                                <div class="glass-blur-preview" aria-hidden="true"><span class="glass-blur-preview-surface">Anteprima vetro</span></div>
+                                <select id="glass-blur-select" class="w-full bg-black/40 p-3.5 rounded-xl border border-white/10 text-xs font-bold text-white cursor-pointer focus:outline-none focus:border-white/30">
+                                    <option value="minimal">Minimal (Leggera, 8px)</option>
+                                    <option value="standard">Standard (Vetro Bilanciato, 24px)</option>
+                                    <option value="heavy">Marcata (Glassmorphism Alto, 48px)</option>
+                                    <option value="ultra">Ultra VisionOS (Sfocatura Massima, 75px)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 2. Widget & Layout Section -->
+                <section id="tab-widgets" class="tab-content hidden">
+                    <h2 class="settings-header">Widget & Personalizzazione Layout</h2>
+                    <div class="space-y-6">
+                        <!-- Saluto e Orologio Config -->
+                        <div class="bg-white/5 border border-white/10 p-6 rounded-3xl space-y-4">
+                            <h3 class="text-xs font-extrabold uppercase tracking-wider text-cyan-400">Identità, Saluto & Orologio</h3>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="input-group mb-0">
+                                    <label class="input-label">Nome Personalizzato di Benvenuto</label>
+                                    <input type="text" id="greeting-name-input" class="w-full bg-black/40 p-3.5 rounded-xl border border-white/10 text-xs font-bold text-white" placeholder="Il tuo nome">
+                                </div>
+                                <div class="input-group mb-0">
+                                    <label class="input-label">Motore di Ricerca Preferito</label>
+                                    <select id="search-engine-select" class="w-full bg-black/40 p-3.5 rounded-xl border border-white/10 text-xs font-bold text-white cursor-pointer">
+                                        <option value="google">🔍 Google</option>
+                                        <option value="chatgpt">🤖 ChatGPT</option>
+                                        <option value="perplexity">⚡ Perplexity AI</option>
+                                        <option value="youtube">▶️ YouTube</option>
+                                        <option value="duckduckgo">🦆 DuckDuckGo</option>
+                                        <option value="bing">🔷 Bing</option>
+                                        <option value="amazon">📦 Amazon</option>
+                                        <option value="brave">🦁 Brave</option>
+                                        <option value="ecosia">🌳 Ecosia</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4 pt-2">
+                                <label class="flex items-center justify-between p-3.5 bg-black/30 rounded-2xl border border-white/5 cursor-pointer">
+                                    <span class="text-xs font-bold">Formato Orologio 24 Ore</span>
+                                    <input type="checkbox" id="clock-24h-toggle" class="w-4 h-4 accent-cyan-400 cursor-pointer">
+                                </label>
+                                <label class="flex items-center justify-between p-3.5 bg-black/30 rounded-2xl border border-white/5 cursor-pointer">
+                                    <span class="text-xs font-bold">Mostra Secondi in Tempo Reale</span>
+                                    <input type="checkbox" id="show-seconds-toggle" class="w-4 h-4 accent-cyan-400 cursor-pointer">
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Visibilità Moduli Widget -->
+                        <div class="bg-white/5 border border-white/10 p-6 rounded-3xl space-y-4">
+                            <h3 class="text-xs font-extrabold uppercase tracking-wider text-cyan-400">Attivazione / Disattivazione Widget</h3>
+                            <div class="grid grid-cols-2 gap-3">
+                                <label class="flex items-center justify-between p-3.5 bg-black/30 rounded-2xl border border-white/5 cursor-pointer hover:bg-black/50 transition-all">
+                                    <span class="text-xs font-bold">Widget Orologio & Data</span>
+                                    <input type="checkbox" id="widget-clock-toggle" class="w-4 h-4 accent-cyan-400 cursor-pointer" checked>
+                                </label>
+                                <label class="flex items-center justify-between p-3.5 bg-black/30 rounded-2xl border border-white/5 cursor-pointer hover:bg-black/50 transition-all">
+                                    <span class="text-xs font-bold">Widget Meteo & Città</span>
+                                    <input type="checkbox" id="widget-weather-toggle" class="w-4 h-4 accent-cyan-400 cursor-pointer" checked>
+                                </label>
+                                <label class="flex items-center justify-between p-3.5 bg-black/30 rounded-2xl border border-white/5 cursor-pointer hover:bg-black/50 transition-all">
+                                    <span class="text-xs font-bold">Barra di Ricerca Web</span>
+                                    <input type="checkbox" id="widget-search-toggle" class="w-4 h-4 accent-cyan-400 cursor-pointer" checked>
+                                </label>
+                                <label class="flex items-center justify-between p-3.5 bg-black/30 rounded-2xl border border-white/5 cursor-pointer hover:bg-black/50 transition-all">
+                                    <span class="text-xs font-bold">Player Musicale (Spotify/Apple)</span>
+                                    <input type="checkbox" id="widget-player-toggle" class="w-4 h-4 accent-cyan-400 cursor-pointer" checked>
+                                </label>
+                                <label class="flex items-center justify-between p-3.5 bg-black/30 rounded-2xl border border-white/5 cursor-pointer hover:bg-black/50 transition-all">
+                                    <span class="text-xs font-bold">Dock Scorciatoie Rapide</span>
+                                    <input type="checkbox" id="widget-shortcuts-toggle" class="w-4 h-4 accent-cyan-400 cursor-pointer" checked>
+                                </label>
+                                <label class="flex items-center justify-between p-3.5 bg-black/30 rounded-2xl border border-white/5 cursor-pointer hover:bg-black/50 transition-all">
+                                    <span class="text-xs font-bold">Lista Task Fluida (To-Do)</span>
+                                    <input type="checkbox" id="widget-tasks-toggle" class="w-4 h-4 accent-cyan-400 cursor-pointer" checked>
+                                </label>
+
+                            </div>
+                        </div>
+                        <!-- Personalizzazione Meteo & Posizione -->
+                        <div class="bg-gradient-to-r from-cyan-900/30 via-slate-900/40 to-blue-900/30 border border-white/20 p-6 rounded-3xl space-y-5 shadow-xl">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-xs font-extrabold uppercase tracking-wider text-cyan-400 flex items-center gap-2">
+                                    <svg class="w-4 h-4 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+                                    Personalizzazione Meteo & Posizione
+                                </h3>
+                                <span class="text-[10px] font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 px-2.5 py-1 rounded-full uppercase">Meteo Custom</span>
+                            </div>
+
+                            <!-- Mode Selector, Units & City Input -->
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                <div class="input-group mb-0">
+                                    <label class="input-label">Rilevamento Posizione</label>
+                                    <div class="flex gap-2">
+                                        <select id="weather-mode-select" class="flex-1 bg-black/40 p-3 rounded-xl border border-white/10 text-xs font-bold text-white cursor-pointer">
+                                            <option value="auto">🌐 Automatica (GPS / Rete IP)</option>
+                                            <option value="manual">📍 Città Manuale</option>
+                                        </select>
+                                        <button id="request-location-btn" class="bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/30 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer shrink-0 btn-anim" title="Rileva posizione GPS ora">📍 GPS</button>
+                                    </div>
+                                </div>
+                                <div class="input-group mb-0">
+                                    <label class="input-label">Unità di Misura</label>
+                                    <select id="weather-units-select" class="w-full bg-black/40 p-3 rounded-xl border border-white/10 text-xs font-bold text-white cursor-pointer">
+                                        <option value="celsius">°C (Celsius)</option>
+                                        <option value="fahrenheit">°F (Fahrenheit)</option>
+                                    </select>
+                                </div>
+                                <div id="weather-city-input-group" class="input-group mb-0 hidden">
+                                    <label class="input-label">Nome Città</label>
+                                    <div class="flex gap-2">
+                                        <input type="text" id="weather-city-input" class="flex-1 bg-black/40 p-3 rounded-xl border border-white/10 text-xs font-bold text-white" placeholder="Es. Roma, Milano...">
+                                        <button id="apply-weather-city-btn" class="bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/30 px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer shrink-0 btn-anim">Salva</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Indicatori Visibili Meteo -->
+                            <div>
+                                <label class="text-[10px] font-bold block mb-2 opacity-50 uppercase">Elementi Visibili nel Widget</label>
+                                <div class="grid grid-cols-3 gap-2.5">
+                                    <label class="flex items-center gap-2 p-3 bg-black/30 rounded-xl border border-white/10 cursor-pointer hover:bg-black/50 transition-all text-xs font-bold">
+                                        <input type="checkbox" id="weather-show-city-toggle" class="w-4 h-4 accent-cyan-400 cursor-pointer" checked>
+                                        <span>Nome Città</span>
+                                    </label>
+                                    <label class="flex items-center gap-2 p-3 bg-black/30 rounded-xl border border-white/10 cursor-pointer hover:bg-black/50 transition-all text-xs font-bold">
+                                        <input type="checkbox" id="weather-show-temp-toggle" class="w-4 h-4 accent-cyan-400 cursor-pointer" checked>
+                                        <span>Temperatura</span>
+                                    </label>
+                                    <label class="flex items-center gap-2 p-3 bg-black/30 rounded-xl border border-white/10 cursor-pointer hover:bg-black/50 transition-all text-xs font-bold">
+                                        <input type="checkbox" id="weather-show-icon-toggle" class="w-4 h-4 accent-cyan-400 cursor-pointer" checked>
+                                        <span>Icona Meteo</span>
+                                    </label>
+                                    <label class="flex items-center gap-2 p-3 bg-black/30 rounded-xl border border-white/10 cursor-pointer hover:bg-black/50 transition-all text-xs font-bold">
+                                        <input type="checkbox" id="weather-show-condition-toggle" class="w-4 h-4 accent-cyan-400 cursor-pointer" checked>
+                                        <span>Descrizione Clima</span>
+                                    </label>
+                                    <label class="flex items-center gap-2 p-3 bg-black/30 rounded-xl border border-white/10 cursor-pointer hover:bg-black/50 transition-all text-xs font-bold">
+                                        <input type="checkbox" id="weather-show-humidity-toggle" class="w-4 h-4 accent-cyan-400 cursor-pointer" checked>
+                                        <span>Umidità 💧</span>
+                                    </label>
+                                    <label class="flex items-center gap-2 p-3 bg-black/30 rounded-xl border border-white/10 cursor-pointer hover:bg-black/50 transition-all text-xs font-bold">
+                                        <input type="checkbox" id="weather-show-wind-toggle" class="w-4 h-4 accent-cyan-400 cursor-pointer" checked>
+                                        <span>Vento 💨</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 3. Music Player & Integration Section -->
+                <section id="tab-integration" class="tab-content hidden">
+                    <h2 class="settings-header">Musica & Configurazione Player</h2>
+                    <div class="space-y-6">
+
+                        <!-- Active Source Selector -->
+                        <div class="bg-gradient-to-r from-purple-950/40 via-slate-900/60 to-pink-950/40 border border-white/15 p-6 rounded-3xl space-y-4 shadow-xl">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h3 class="text-xs font-extrabold uppercase tracking-wider text-pink-400 flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-pink-400" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+                                        Sorgente Musicale Attiva
+                                    </h3>
+                                    <p class="text-xs opacity-70 mt-1">Spotify alimenta il player e controlla la riproduzione dal cruscotto.</p>
+                                </div>
+                                <span id="active-source-badge" class="text-[11px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-3 py-1.5 rounded-full uppercase flex items-center gap-1.5 shadow-sm">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                                    <span id="active-source-badge-text">Spotify</span>
+                                </span>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 gap-3 pt-1">
+                                <button type="button" class="music-source-btn p-4 rounded-2xl border transition-all flex flex-col items-center gap-2.5 cursor-pointer text-center bg-white/5 border-white/10 hover:border-emerald-500/50 hover:bg-emerald-500/10" data-source="spotify">
+                                    <div class="w-8 h-8 rounded-xl bg-emerald-500 text-black flex items-center justify-center font-bold shadow-md shadow-emerald-500/20">
+                                        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.49 17.305c-.215.353-.674.464-1.027.248-2.834-1.73-6.402-2.12-10.605-1.162-.404.092-.81-.157-.903-.56-.093-.404.157-.81.56-.902 4.603-1.053 8.528-.602 11.728 1.353.353.216.464.674.248 1.027zm1.464-3.26c-.27.44-.846.58-1.286.31-3.245-1.995-8.193-2.574-12.03-1.407-.497.153-1.02-.126-1.175-.623-.153-.496.126-1.02.623-1.173 4.384-1.332 9.83-.687 13.558 1.604.44.27.58.847.31 1.288zm.126-3.414c-3.893-2.31-10.31-2.525-14.07-.42-.6.33-1.353.116-1.684-.48-.33-.597-.116-1.352.48-1.683 4.316-2.41 11.393-2.152 15.86.5 1.5.89-.3.12 1.352.45.6.33.815 1.08.484 1.68-.33.6-1.082.81-1.682.484l.01-.004z"/></svg>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs font-bold text-white">Spotify</div>
+                                        <div class="text-[10px] text-white/50">Live Connect</div>
+                                    </div>
+                                </button>
+
+                                
+
+                                
+
+                                
+                            </div>
+                        </div>
+
+                        <!-- Spotify Card -->
+                        <div id="spotify-status-card" class="bg-white/5 border border-white/10 p-6 rounded-3xl flex items-center justify-between shadow-lg">
+                            <div class="flex items-center gap-4">
+                                <div id="spotify-status-indicator" class="w-3 h-3 bg-red-500 rounded-full shrink-0"></div>
+                                <div>
+                                    <div class="spotify-account-details mb-1">
+                                        <span id="spotify-plan-status" role="status" hidden></span>
+                                    </div>
+                                    <div id="spotify-status-text" class="text-sm font-bold">Non connesso a Spotify</div>
+                                    <div id="spotify-status-sub" class="text-xs opacity-50">Collega Spotify per controllare la riproduzione</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3 shrink-0">
+                                <a id="spotify-open-link" href="https://open.spotify.com/" target="_blank" rel="noopener noreferrer" class="bg-[#1ed760] hover:bg-[#1fdf64] hover:scale-105 active:scale-95 text-black px-6 py-3 rounded-full font-bold text-xs transition-all cursor-pointer shadow-lg shadow-green-500/20 inline-flex items-center gap-2">
+                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+                                    <span>Apri Spotify</span>
+                                </a>
+                                <button id="spotify-connect-btn" class="bg-white/10 hover:bg-white/20 text-white px-5 py-3 rounded-full font-bold text-xs transition-all cursor-pointer border border-white/15">Connetti Spotify</button>
+                            </div>
+                        </div>
+
+                        <div class="settings-player-card spotify-setup-card">
+                            <h3>Connect your own Spotify account</h3>
+                            <p>Each browser install needs its own Spotify Developer app setup. You only need the Client ID; never paste a Client Secret here.</p>
+                            <ol class="spotify-setup-steps">
+                                <li><strong>1. Create an app.</strong> Open <a href="https://developer.spotify.com/dashboard" target="_blank" rel="noopener noreferrer">Spotify Developer Dashboard</a>, create an app, and enable Web API.</li>
+                                <li><strong>2. Add this exact Redirect URI</strong> in your app’s Settings → Redirect URIs, then save your changes.</li>
+                            </ol>
+                            <div class="spotify-redirect-row"><code id="spotify-redirect-uri-display">Loading your Redirect URI…</code><button id="spotify-copy-redirect" type="button">Copy</button></div>
+                            <p id="spotify-redirect-hint" class="spotify-setup-hint"></p>
+                            <label for="spotify-client-id">3. Copy your app’s Client ID and paste it here.</label>
+                            <input type="text" id="spotify-client-id" autocomplete="off" spellcheck="false" placeholder="Spotify Client ID">
+                            <p id="spotify-setup-status" class="spotify-setup-hint" role="status"></p>
+                            <p><strong>4. Save, then click Connect Spotify above.</strong> Approve the requested access on Spotify’s page.</p>
+                        </div>
+
+                        <div class="bg-white/5 border border-white/10 p-6 rounded-3xl space-y-4">
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-pink-400">Ritmo ed energia · MusicArk</h3>
+                            <p class="text-[11px] opacity-70 leading-relaxed">I colpi di cassa della mappa muovono Lineare, Fisheye, Kinetic e MUSICA. Energia e velocità delle frasi guidano gli effetti Auto.</p>
+                            <label class="flex items-center gap-3 text-xs"><input type="checkbox" id="audio-map-enabled" checked> Movimento sui colpi di cassa</label>
+                            <p id="audio-map-status" class="text-[11px] opacity-70" role="status">MusicArk · casse reali sincronizzate</p>
+                            <p class="text-[11px] opacity-70">Gratuito, senza chiavi. Il catalogo pubblico è limitato: se manca la versione esatta, il movimento audio resta disattivato. Per iniziare prova HUMBLE di Kendrick Lamar.</p>
+                            <a href="https://www.musicark.dev/songs" target="_blank" rel="noopener noreferrer" class="text-[11px] text-pink-400 underline">Brani disponibili su MusicArk</a>
+                        </div>
+
+                        <!-- Custom Music Player (local / URL audio + custom lyrics) -->
+                        <div class="bg-white/5 border border-white/10 p-6 rounded-3xl space-y-4">
+                            <h3 class="text-xs font-extrabold uppercase tracking-wider text-pink-400">🎧 Riproduzione Personalizzata</h3>
+                            <p class="text-[11px] opacity-60 leading-relaxed">Riproduci un file audio (locale o URL) con titolo, copertina e testi personalizzati, anche senza Spotify.</p>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="input-group mb-0">
+                                    <label class="input-label">Titolo Brano</label>
+                                    <input type="text" id="custom-music-title" class="w-full bg-black/40 p-3.5 rounded-xl border border-white/10 text-xs font-bold text-white" placeholder="All Of Me">
+                                </div>
+                                <div class="input-group mb-0">
+                                    <label class="input-label">Artista</label>
+                                    <input type="text" id="custom-music-artist" class="w-full bg-black/40 p-3.5 rounded-xl border border-white/10 text-xs font-bold text-white" placeholder="Nao">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="input-group mb-0">
+                                    <label class="input-label">URL Immagine Copertina</label>
+                                    <input type="text" id="custom-music-art-url" class="w-full bg-black/40 p-3.5 rounded-xl border border-white/10 text-xs font-mono text-white" placeholder="https://...">
+                                    <button id="custom-music-art-btn" class="mt-2 w-full text-[10px] font-bold text-white/60 bg-white/5 hover:bg-white/10 border border-white/10 py-2 rounded-xl transition-all cursor-pointer">🖼 Carica file immagine</button>
+                                    <input type="file" id="custom-music-art-file" class="hidden" accept="image/*">
+                                </div>
+                                <div class="input-group mb-0">
+                                    <label class="input-label">Audio (URL o file MP3/OGG)</label>
+                                    <input type="text" id="custom-music-audio-url" class="w-full bg-black/40 p-3.5 rounded-xl border border-white/10 text-xs font-mono text-white" placeholder="https://.../song.mp3">
+                                    <button id="custom-music-audio-btn" class="mt-2 w-full text-[10px] font-bold text-white/60 bg-white/5 hover:bg-white/10 border border-white/10 py-2 rounded-xl transition-all cursor-pointer">🎵 Carica file audio</button>
+                                    <input type="file" id="custom-music-audio-file" class="hidden" accept="audio/*">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">Testi (formato LRC o testo semplice)</label>
+                                <textarea id="custom-music-lyrics" class="w-full bg-black/40 p-3.5 rounded-xl border border-white/10 text-xs font-mono text-white resize-none h-24" placeholder="[00:00.5]Primo verso...&#10;[00:04.0]Secondo verso..."></textarea>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <button id="apply-custom-music-btn" class="bg-pink-500/20 hover:bg-pink-500/30 text-pink-300 border border-pink-500/30 py-3.5 rounded-2xl font-bold text-xs transition-all cursor-pointer">▶ Applica & Riproduci</button>
+                                <button id="reset-custom-music-btn" class="bg-white/5 hover:bg-white/10 border border-white/10 text-white/50 py-3.5 rounded-2xl font-bold text-xs transition-all cursor-pointer">↺ Azzera</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 4. Social Tracker: upcoming feature -->
+                <section id="tab-social" class="tab-content hidden" aria-label="Social Tracker prossimamente">
+                    <div class="upcoming-page" role="status">
+                        <span class="upcoming-page-kicker">FUNZIONE IN ARRIVO</span>
+                        <div class="upcoming-page-icon" aria-hidden="true">✦</div>
+                        <h2>Social Tracker</h2>
+                        <p>Il Social Tracker non è disponibile al momento. Stiamo preparando un modo affidabile per mostrare le statistiche social in un prossimo aggiornamento.</p>
+                        <strong>PROSSIMAMENTE</strong>
+                    </div>
+                </section>
+
+                <!-- 5. Scorciatoie -->
+                <section id="tab-shortcuts" class="tab-content hidden">
+                    <h2 class="settings-header">Gestione Scorciatoie</h2>
+                    <div class="space-y-6">
+                        <div class="bg-white/5 p-6 rounded-3xl border border-white/10">
+                            <h3 class="text-sm font-bold mb-4">Aggiungi Nuova Scorciatoia</h3>
+                            <div class="grid grid-cols-2 gap-4 mb-4">
+                                <input type="text" id="shortcut-name" class="bg-black/40 p-4 rounded-xl border border-white/10 text-xs font-bold" placeholder="Nome (es. GitHub)">
+                                <input type="text" id="shortcut-url" class="bg-black/40 p-4 rounded-xl border border-white/10 text-xs font-bold" placeholder="URL (https://...)">
+                            </div>
+                            <button id="add-shortcut-btn" class="w-full bg-white text-black py-3 rounded-xl font-bold hover:scale-[1.01] transition-all cursor-pointer text-xs">Aggiungi Scorciatoia</button>
+                        </div>
+                        <div id="shortcuts-manager-list" class="space-y-3">
+                            <!-- Managed Shortcuts -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 6. Backup & Advanced -->
+                <section id="tab-backup" class="tab-content hidden">
+                    <h2 class="settings-header">Backup, Ripristino & Custom CSS</h2>
+                    <div class="space-y-6">
+                        <!-- Export / Import JSON Config -->
+                        <div class="bg-white/5 p-6 rounded-3xl border border-white/10 space-y-4">
+                            <h3 class="text-xs font-extrabold text-rose-400 uppercase tracking-wider">Backup Configurazione (.JSON)</h3>
+                            <p class="text-xs opacity-70 leading-relaxed">Salva un file di backup con tutte le tue personalizzazioni, sfondi, scorciatoie e credenziali oppure ripristinalo in un clic su qualsiasi dispositivo.</p>
+                            
+                            <div class="grid grid-cols-2 gap-4 pt-2">
+                                <button id="export-json-btn" class="flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 border border-white/15 text-white py-3.5 rounded-2xl font-bold transition-all cursor-pointer text-xs">
+                                    <svg class="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                                    <span>Esporta JSON Config</span>
+                                </button>
+
+                                <button id="import-json-trigger-btn" class="flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 border border-white/15 text-white py-3.5 rounded-2xl font-bold transition-all cursor-pointer text-xs">
+                                    <svg class="w-4 h-4 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                                    <span>Importa JSON Config</span>
+                                </button>
+                                <input type="file" id="import-json-file" class="hidden" accept=".json">
+                            </div>
+                        </div>
+
+                        <!-- Reset Default Settings -->
+                        <div class="bg-red-500/10 p-6 rounded-3xl border border-red-500/20 flex items-center justify-between">
+                            <div>
+                                <h3 class="text-xs font-extrabold text-red-400 uppercase tracking-wider mb-1">Ripristino di Fabbrica</h3>
+                                <p class="text-xs opacity-70">Ripristina tutte le impostazioni dello stato originale della dashboard.</p>
+                            </div>
+                            <button id="reset-default-settings-btn" class="bg-red-500/20 hover:bg-red-500/30 text-red-300 border border-red-500/30 px-5 py-3 rounded-2xl font-bold text-xs transition-all cursor-pointer">Ripristina</button>
+                        </div>
+
+                        <!-- Custom CSS Editor -->
+                        <div class="bg-white/5 p-6 rounded-3xl border border-white/10 space-y-3">
+                            <label class="text-xs font-bold opacity-40 uppercase block">Inietta Stili CSS Custom</label>
+                            <textarea id="custom-css-input" class="custom-textarea" placeholder="/* Inserisci qui i tuoi stili CSS personalizzati... */"></textarea>
+                        </div>
+                    </div>
+                </section>
+                <!-- 7. Produttività & Extra -->
+                <section id="tab-productivity" class="tab-content hidden">
+                    <h2 class="settings-header">Widget & Extra</h2>
+                    <div class="space-y-6">
+                        
+                        
+
+                        <!-- Habit Tracker -->
+                        
+
+
+                        <!-- Quote -->
+                        <div class="bg-white/5 border border-white/10 p-6 rounded-3xl space-y-3">
+                            <h3 class="text-xs font-extrabold uppercase tracking-wider text-cyan-400">💬 Citazione del Giorno</h3>
+                            <label class="flex items-center justify-between p-3.5 bg-black/30 rounded-2xl border border-white/5 cursor-pointer">
+                                <span class="text-xs font-bold">Mostra Citazione in Cima</span>
+                                <input type="checkbox" id="quote-visible-toggle" class="w-4 h-4 accent-cyan-400 cursor-pointer">
+                            </label><label for="quote-api-key" class="block text-xs text-white/60">Chiave API DailyQuotes (traduzione)</label><input id="quote-api-key" type="password" autocomplete="off" class="w-full p-3 rounded-xl" placeholder="Chiave API DailyQuotes"><p class="text-xs text-white/50">La traduzione online richiede il piano del servizio. Senza chiave viene usata la raccolta locale nella tua lingua.</p>
+                        </div>
+
+                        <!-- Dual Clock -->
+                        <div class="bg-white/5 border border-white/10 p-6 rounded-3xl space-y-4">
+                            <h3 class="text-xs font-extrabold uppercase tracking-wider text-violet-400">🕐 Doppio Orologio</h3>
+                            <label class="flex items-center justify-between p-3.5 bg-black/30 rounded-2xl border border-white/5 cursor-pointer">
+                                <span class="text-xs font-bold">Mostra Doppio Fuso Orario</span>
+                                <input type="checkbox" id="dual-clock-toggle" class="w-4 h-4 accent-violet-400 cursor-pointer">
+                            </label>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="text-[9px] font-bold text-white/40 block mb-1.5">Fuso 1</label>
+                                    <select id="dual-tz-1" class="w-full bg-black/40 p-3 rounded-xl border border-white/10 text-xs font-bold text-white cursor-pointer">
+                                        <option value="America/New_York">New York</option>
+                                        <option value="America/Los_Angeles">Los Angeles</option>
+                                        <option value="Europe/London">Londra</option>
+                                        <option value="Europe/Paris">Parigi</option>
+                                        <option value="America/Sao_Paulo">São Paulo</option>
+                                        <option value="Asia/Dubai">Dubai</option>
+                                        <option value="Asia/Tokyo">Tokyo</option>
+                                        <option value="Australia/Sydney">Sydney</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="text-[9px] font-bold text-white/40 block mb-1.5">Fuso 2</label>
+                                    <select id="dual-tz-2" class="w-full bg-black/40 p-3 rounded-xl border border-white/10 text-xs font-bold text-white cursor-pointer">
+                                        <option value="Asia/Tokyo">Tokyo</option>
+                                        <option value="America/New_York">New York</option>
+                                        <option value="America/Los_Angeles">Los Angeles</option>
+                                        <option value="Europe/London">Londra</option>
+                                        <option value="America/Sao_Paulo">São Paulo</option>
+                                        <option value="Asia/Dubai">Dubai</option>
+                                        <option value="Australia/Sydney">Sydney</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Crypto Ticker -->
+                        <div class="bg-white/5 border border-white/10 p-6 rounded-3xl space-y-4">
+                            <h3 class="text-xs font-extrabold uppercase tracking-wider text-yellow-400">₿ Crypto & Stock Ticker</h3>
+                            <label class="flex items-center justify-between p-3.5 bg-black/30 rounded-2xl border border-white/5 cursor-pointer">
+                                <span class="text-xs font-bold">Mostra Ticker in alto</span>
+                                <input type="checkbox" id="crypto-visible-toggle" class="w-4 h-4 accent-yellow-400 cursor-pointer">
+                            </label>
+                            <div>
+                                <label class="text-[9px] font-bold text-white/40 block mb-1.5">Alpha Vantage API Key (Stock)</label>
+                                <input type="text" id="alpha-vantage-key" class="w-full bg-black/40 p-3 rounded-xl border border-white/10 text-xs font-mono text-white" placeholder="Chiave gratuita da alphavantage.co">
+                            </div>
+                            <div>
+                                <label class="text-[9px] font-bold text-white/40 block mb-1.5">Simboli Stock (virgola-separati)</label>
+                                <input type="text" id="stock-symbols" class="w-full bg-black/40 p-3 rounded-xl border border-white/10 text-xs font-mono text-white" placeholder="AAPL,TSLA,NVDA">
+                            </div>
+                        </div>
+
+                        
+                        
+
+                        
+                        
+
+                        
+                        
+
+                        
+                        
+
+                        <!-- Click Sounds -->
+                        <div class="bg-white/5 border border-white/10 p-6 rounded-3xl space-y-3">
+                            <h3 class="text-xs font-extrabold uppercase tracking-wider text-white/50">🔊 Feedback Sonoro UI</h3>
+                            <label class="flex items-center justify-between p-3.5 bg-black/30 rounded-2xl border border-white/5 cursor-pointer">
+                                <span class="text-xs font-bold">Suono al Click</span>
+                                <input type="checkbox" id="click-sounds-toggle" class="w-4 h-4 accent-white cursor-pointer">
+                            </label>
+                        </div>
+
+                        <!-- Theme Presets -->
+                        <div class="bg-white/5 p-6 rounded-3xl border border-white/10 space-y-4">
+                            <h3 class="text-xs font-extrabold text-amber-400 uppercase tracking-wider">🎨 Tema Presets Condivisibili</h3>
+                            <div class="flex gap-3">
+                                <input type="text" id="theme-code-input" class="flex-1 bg-black/40 p-3.5 rounded-xl border border-white/10 text-xs font-mono text-white" placeholder="Incolla un codice tema...">
+                                <button id="theme-import-btn" class="bg-white/10 hover:bg-white/20 border border-white/15 text-white px-4 py-3 rounded-xl font-bold text-xs transition-all cursor-pointer">Importa</button>
+                            </div>
+                            <button id="theme-export-btn" class="w-full bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 py-3 rounded-xl font-bold text-xs transition-all cursor-pointer">📋 Copia Codice Tema</button>
+                        </div>
+
+                        <!-- Google Drive -->
+                        <div class="bg-blue-500/10 p-6 rounded-3xl border border-blue-500/20 space-y-4">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h3 class="text-xs font-extrabold text-blue-400 uppercase tracking-wider">☁️ Google Drive Backup</h3>
+                                    <p class="text-xs opacity-60 mt-0.5">Sincronizza su Drive</p>
+                                </div>
+                                <div id="gdrive-status-dot" class="w-2.5 h-2.5 rounded-full bg-red-500"></div>
+                            </div>
+                            <div id="gdrive-status-text" class="text-xs font-bold text-white/50">Non connesso</div>
+                            <div class="grid grid-cols-3 gap-2">
+                                <button id="gdrive-login-btn" class="bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 border border-blue-500/30 py-3 rounded-xl font-bold text-xs transition-all cursor-pointer">🔑 Google Login</button>
+                                <button id="gdrive-backup-btn" class="bg-white/10 hover:bg-white/20 border border-white/15 text-white py-3 rounded-xl font-bold text-xs transition-all cursor-pointer">☁️ Salva</button>
+                                <button id="gdrive-restore-btn" class="bg-white/10 hover:bg-white/20 border border-white/15 text-white py-3 rounded-xl font-bold text-xs transition-all cursor-pointer">📥 Ripristina</button>
+                            </div>
+                        </div>
+
+                        
+                        
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Apple Music Immersion Player (Matches Apple Music Web Layout) -->
+    <div id="immersion-player" class="fixed inset-0 bg-[#080511] z-[99999] hidden flex-col transition-opacity duration-200 opacity-0 overflow-hidden select-none">
+        
+        <!-- Apple Music / Spotify Canvas Ambient Fluid Background -->
+        <div id="immersion-bg-mesh" class="absolute inset-0 pointer-events-none overflow-hidden z-0 transition-all duration-1000 mode-photo-fluid">
+            <!-- Soft static underlay (extra blur depth) -->
+            <div id="art-single-layer" class="single-photo-distort"></div>
+            <!-- Animated palette orbs (Color mode) -->
+            <div id="palette-fluid-layer" class="palette-fluid-layer" aria-hidden="true">
+                <div class="palette-orb orb-1"></div>
+                <div class="palette-orb orb-2"></div>
+                <div class="palette-orb orb-3"></div>
+                <div class="palette-orb orb-4"></div>
+                <div class="palette-orb orb-5"></div>
+            </div>
+            <!-- WebGL soft fluid canvas (Photo mode) -->
+            <canvas id="polar-shader-canvas" class="w-full h-full block absolute inset-0 z-10 pointer-events-none"></canvas>
+            <!-- Soft vignette for readability -->
+            <div class="immersion-bg-vignette"></div>
+        </div>
+
+        <video id="immersion-motion-bg" class="motion-cover-bg" loop muted playsinline aria-hidden="true"></video>
+        <!-- Top Nav Bar (Always visible Apple Music Header Controls) -->
+        <header id="immersion-header" class="p-6 px-8 lg:px-12 flex justify-between items-center w-full shrink-0 relative z-30">
+            <button id="close-immersion" class="w-10 h-10 flex items-center justify-center rounded-full bg-transparent hover:bg-white/15 text-white/80 hover:text-white transition-all cursor-pointer btn-anim" title="Chiudi visualizzazione immersiva">
+                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9.5l6 5 6-5"/></svg>
+            </button>
+        </header>
+
+        <!-- Main Body: Left (Artwork + Metadata), Right (Lyrics or Queue) -->
+        <main class="flex-1 flex items-center px-8 lg:px-14 xl:px-20 gap-8 lg:gap-14 xl:gap-20 overflow-hidden relative z-10 w-full min-h-0">
+            
+            <!-- Left Side: Album Artwork & Metadata (Clean Floating Apple Sing Look) -->
+            <div id="immersion-left-col" class="w-[36%] lg:w-[32%] xl:w-[30%] shrink-0 flex flex-col items-center lg:items-start justify-center transition-all duration-500">
+                
+                <!-- Artwork with Apple Playback Scale Animation -->
+                <div id="immersion-art" class="w-full aspect-square max-w-[340px] xl:max-w-[400px] rounded-3xl transition-all duration-500 ease-out relative flex items-center justify-center overflow-hidden scale-100 shadow-2xl">
+                    <img id="immersion-art-img" class="w-full h-full object-cover rounded-3xl absolute inset-0 block select-none pointer-events-none z-[1]" alt="Album Cover" />
+                    <video id="immersion-art-video" class="w-full h-full object-cover rounded-3xl absolute inset-0 block select-none pointer-events-none opacity-0 z-[2]" autoplay loop muted playsinline></video>
+                </div>
+
+                <!-- Track Info & Favorite Star directly under Artwork -->
+                <div class="w-full max-w-[340px] xl:max-w-[400px] mt-6 flex justify-between items-start">
+                    <div class="flex-1 pr-3 overflow-hidden">
+                        <div class="flex items-center gap-2">
+                            <h2 id="immersion-title" class="text-2xl xl:text-3xl font-extrabold tracking-tight text-white truncate">All Of Me</h2>
+                            <span id="explicit-badge" class="px-1.5 py-0.5 text-[9px] font-black bg-white/20 text-white/80 rounded uppercase hidden">E</span>
+                        </div>
+                        <p id="immersion-artist" class="text-base xl:text-lg font-medium text-white/60 truncate mt-1">Nao</p>
+                    </div>
+                    <!-- Star Favorite — SF Symbol: star / star.fill, no background, pure icon -->
+                    <button id="star-favorite-btn" class="flex items-center justify-center text-white/40 hover:text-white transition-all cursor-pointer btn-anim shrink-0 bg-transparent border-0 p-2" title="Preferiti">
+                        <svg id="star-icon" class="w-6 h-6 transition-all duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2l2.94 6.26L22 9.27l-5 5.14L18.18 21 12 17.77 5.82 21 7 14.41 2 9.27l7.06-1.01z"/>
+                        </svg>
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- Right Side: Lyrics / Queue (Full Width Lyrics Stage) -->
+            <div id="immersion-right-col" class="flex-1 h-full flex flex-col justify-center relative overflow-hidden transition-all duration-500">
+
+                <!-- Lyrics View Container -->
+                <div id="lyrics-view" class="h-full w-full flex flex-col justify-center relative transition-all duration-300 z-10">
+                    <div id="lyrics-container" class="h-full overflow-y-auto pl-8 pr-8 lg:pl-12 lg:pr-12 no-scrollbar lyrics-scroll">
+                        <div class="lyric-line opacity-30">Caricamento testi...</div>
+                    </div>
+                    <canvas id="lyrics-fisheye-canvas" aria-hidden="true"></canvas>
+                </div>
+
+                <!-- Up Next Queue View Container (Apple Music macOS Glass Style) -->
+                <div id="queue-view" class="h-full w-full flex flex-col justify-start py-6 lg:py-8 hidden overflow-hidden transition-all duration-300 z-10">
+                    <div class="queue-heading shrink-0"><h3>In Coda</h3></div>
+                    <div id="queue-list-container" tabindex="0" role="region" aria-label="Brani in coda" class="flex-1 overflow-y-auto pr-2 custom-scrollbar rounded-2xl bg-black/25 border border-white/10 backdrop-blur-2xl p-2 space-y-1 min-h-0 shadow-2xl">
+                        <!-- Queue items -->
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+
+        <!-- Bottom Footer (Full-width sleek scrubber & Apple Music controls) -->
+        <footer class="p-6 px-8 lg:px-14 xl:px-20 w-full shrink-0 relative z-30 flex flex-col gap-3">
+            <!-- Scrubber Row: Sleek 4px bar with timestamps underneath on left and right -->
+            <div class="w-full max-w-5xl mx-auto flex flex-col gap-1.5">
+                <div id="immersion-scrubber" class="immersion-scrubber group w-full cursor-pointer py-1.5" role="slider" aria-label="Posizione brano" tabindex="0">
+                    <div class="immersion-scrubber-track">
+                        <div id="immersion-progress" class="immersion-scrubber-fill" style="width: 30%">
+                            <div class="immersion-scrubber-thumb"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center text-[11px] font-semibold text-white/40 select-none font-mono tracking-tight px-0.5">
+                    <span id="immersion-current-time">0:00</span>
+                    <span id="immersion-duration">-0:00</span>
+                </div>
+            </div>
+
+            <div id="lyrics-source-label" class="w-full mx-auto text-center" aria-live="polite"></div>
+
+<div id="lyrics-effect-controls" role="group" aria-label="Effetti Kinetic" hidden><label for="lyrics-effect-select">Effetto</label><select id="lyrics-effect-select" aria-label="Effetto Kinetic"><optgroup label="Automatico"><option value="auto" data-lyrics-effect="auto">Auto</option></optgroup><optgroup label="Movimenti 3D"><option value="orbit" data-lyrics-effect="orbit">Orbita</option><option value="lift" data-lyrics-effect="lift">Verticale</option><option value="dolly" data-lyrics-effect="dolly">Profondità</option><option value="helix" data-lyrics-effect="helix">Elica 3D</option><option value="ribbon" data-lyrics-effect="ribbon">Nastro 3D</option><option value="steps" data-lyrics-effect="steps">Scalinata 3D</option><option value="fold" data-lyrics-effect="fold">Pieghe 3D</option><option value="swing" data-lyrics-effect="swing">Pendolo 3D</option><option value="spiral" data-lyrics-effect="spiral">Spirale 3D</option><option value="prism" data-lyrics-effect="prism">Prisma 3D</option><option value="vortex" data-lyrics-effect="vortex">Vortice 3D</option><option value="float" data-lyrics-effect="float">Fluttuante 3D</option><option value="arc" data-lyrics-effect="arc">Arco 3D</option><option value="weave" data-lyrics-effect="weave">Intreccio 3D</option><option value="corkscrew" data-lyrics-effect="corkscrew">Avvitamento 3D</option></optgroup><optgroup label="Testo e ritmo"><option value="wave" data-lyrics-effect="wave">Onda</option><option value="reveal" data-lyrics-effect="reveal">Rivela</option><option value="outline" data-lyrics-effect="outline">Contorno</option><option value="impact" data-lyrics-effect="impact">Impatto</option><option value="punch" data-lyrics-effect="punch">Punch</option><option value="sweep" data-lyrics-effect="sweep">Sweep</option><option value="stack" data-lyrics-effect="stack">Stack</option><option value="tunnel" data-lyrics-effect="tunnel">Tunnel</option><option value="glitch" data-lyrics-effect="glitch">Glitch</option><option value="wall" data-lyrics-effect="wall">Wall</option><option value="cascade" data-lyrics-effect="cascade">Cascade</option><option value="hero" data-lyrics-effect="hero">Hero</option><option value="split" data-lyrics-effect="split">Split</option><option value="slam" data-lyrics-effect="slam">Slam</option><option value="slide" data-lyrics-effect="slide">Slide</option><option value="zoom" data-lyrics-effect="zoom">Zoom</option></optgroup><optgroup label="Video e Mirrors"><option value="video3d" data-lyrics-effect="video3d">Video 3D</option><option value="video-orbit" data-lyrics-effect="video-orbit">Video Orbita</option><option value="video-flight" data-lyrics-effect="video-flight">Video Volo</option><option value="video-tunnel" data-lyrics-effect="video-tunnel">Video Tunnel</option><option value="video-whip" data-lyrics-effect="video-whip">Video Scatto</option><option value="mirrors-pop" data-lyrics-effect="mirrors-pop">Mirrors Pop</option><option value="mirrors-echo" data-lyrics-effect="mirrors-echo">Mirrors Eco</option><option value="mirrors-stack" data-lyrics-effect="mirrors-stack">Mirrors Stack</option><option value="mirrors-sweep" data-lyrics-effect="mirrors-sweep">Mirrors Scia</option><option value="mirrors-zoom" data-lyrics-effect="mirrors-zoom">Mirrors Zoom</option></optgroup></select></div>
+
+            <!-- Transport & Tools Row (Centered Transport + Right Tools) -->
+            <div class="w-full max-w-5xl mx-auto flex justify-between items-center relative">
+                <!-- Left spacer for balance -->
+                <div id="lyrics-display-controls" class="lyric-pill-group" role="group" aria-label="Stile testi"><button type="button" class="lyric-pill" data-lyrics-display="line" aria-label="Lineare" title="Lineare" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h11"/></svg></button><button type="button" class="lyric-pill" data-lyrics-display="circle" aria-label="Fisheye" title="Fisheye" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 5q7 5 14 0M4 12h16M5 19q7-5 14 0"/></svg></button><button type="button" class="lyric-pill" data-lyrics-display="kinetic" aria-label="Kinetic" title="Kinetic" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><text x="12" y="12" text-anchor="middle" dominant-baseline="central" fill="currentColor" stroke="none" font-size="15" font-weight="700">3D</text></svg></button></div>
+
+                <!-- Center Main Transport Buttons -->
+                <div class="flex items-center gap-6">
+                    <!-- Shuffle — SF Symbol: shuffle -->
+                    <button id="immersion-shuffle" class="immersion-ctrl immersion-ctrl-sm btn-anim" title="Casuale">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h2c4.5 0 5.5 12 10 12h6"/><path d="M3 18h2c1.8 0 3.2-2 4.3-4.2M13 9.8C14.2 7.8 15.3 6 17 6h4"/><path d="m18 3 3 3-3 3m0 6 3 3-3 3"/></svg>
+                    </button>
+
+                    <!-- Previous Track — Apple Music-style double backward triangles -->
+                    <button id="immersion-prev" class="immersion-ctrl immersion-ctrl-skip btn-anim relative overflow-visible" title="Precedente">
+                        <svg id="prev-arrows-svg" class="w-8 h-8 fill-current overflow-visible" viewBox="0 0 24 24">
+                            <!-- Apple Music-style double backward triangles -->
+                            <g class="arrow-spawn" opacity="0" transform="translate(-14,0)">
+                                <path d="M10.7 6.4c.7-.5 1.3-.1 1.3.7v9.8c0 .8-.6 1.2-1.3.7l-6.1-4.5c-.8-.6-.8-1.6 0-2.2Z"/>
+                            </g>
+                            <g class="arrow-1">
+                                <path d="M18.7 6.4c.7-.5 1.3-.1 1.3.7v9.8c0 .8-.6 1.2-1.3.7l-6.1-4.5c-.8-.6-.8-1.6 0-2.2Z"/>
+                            </g>
+                            <g class="arrow-2">
+                                <path d="M10.7 6.4c.7-.5 1.3-.1 1.3.7v9.8c0 .8-.6 1.2-1.3.7l-6.1-4.5c-.8-.6-.8-1.6 0-2.2Z"/>
+                            </g>
+                        </svg>
+                    </button>
+
+                    <!-- Play/Pause — SF Symbol: play.circle.fill / pause.circle.fill -->
+                    <button id="immersion-play" class="immersion-ctrl immersion-ctrl-play btn-anim" title="Riproduci/Pausa">
+                        <svg id="immersion-play-icon" class="w-14 h-14 fill-current" viewBox="0 0 56 56">
+                            <!-- Pause bars (swapped via JS; no surrounding circle) -->
+                            <rect x="18" y="17" width="6" height="22" rx="3" fill="currentColor"/>
+                            <rect x="32" y="17" width="6" height="22" rx="3" fill="currentColor"/>
+                        </svg>
+                    </button>
+
+                    <!-- Next Track — Apple Music-style double forward triangles -->
+                    <button id="immersion-next" class="immersion-ctrl immersion-ctrl-skip btn-anim relative overflow-visible" title="Successivo">
+                        <svg id="next-arrows-svg" class="w-8 h-8 fill-current overflow-visible" viewBox="0 0 24 24">
+                            <!-- Apple Music-style double forward triangles -->
+                            <g class="arrow-1">
+                                <path d="M4.3 6.4C3.6 5.9 3 6.3 3 7.1v9.8c0 .8.6 1.2 1.3.7l6.1-4.5c.8-.6.8-1.6 0-2.2Z"/>
+                            </g>
+                            <g class="arrow-2">
+                                <path d="M12.3 6.4c-.7-.5-1.3-.1-1.3.7v9.8c0 .8.6 1.2 1.3.7l6.1-4.5c.8-.6.8-1.6 0-2.2Z"/>
+                            </g>
+                            <g class="arrow-spawn" opacity="0" transform="translate(14,0)">
+                                <path d="M12.3 6.4c-.7-.5-1.3-.1-1.3.7v9.8c0 .8.6 1.2 1.3.7l6.1-4.5c.8-.6.8-1.6 0-2.2Z"/>
+                            </g>
+                        </svg>
+                    </button>
+
+                    <!-- Repeat — SF Symbol: repeat -->
+                    <button id="immersion-repeat" class="immersion-ctrl immersion-ctrl-sm btn-anim" title="Ripeti">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m17 3 4 4-4 4M3 11V10a3 3 0 0 1 3-3h15M7 21l-4-4 4-4m14 0v1a3 3 0 0 1-3 3H3"/></svg>
+                    </button>
+                </div>
+
+                <!-- Lyrics tools, lyrics, motion background, queue -->
+                <div class="flex items-center gap-3.5">
+                    <div class="lyrics-control-pair">
+                    <div class="sing-control-slot">
+                    <!-- Word-level lyrics -->
+                    <button id="karaoke-mode-btn" class="w-10 h-10 flex items-center justify-center text-white/50 hover:text-white transition-all cursor-pointer btn-anim bg-transparent border-0 is-active" title="Parola per parola" aria-label="Parola per parola" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="3" y="6" width="5" height="9" rx="1.5" fill="currentColor" stroke="none"/><rect x="10" y="6" width="4" height="9" rx="1.3"/><rect x="17" y="6" width="4" height="9" rx="1.3"/><path d="M3 19h5"/></svg>
+                    </button>
+                    </div>
+                    <!-- quote.bubble.fill — Lyrics -->
+                    <button id="lyrics-toggle-btn" class="w-10 h-10 flex items-center justify-center text-white/50 hover:text-white transition-all cursor-pointer btn-anim bg-transparent border-0 is-active" title="Testi brano">
+                        <svg class="w-5.5 h-5.5" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M2 5.5A3.5 3.5 0 0 1 5.5 2h13A3.5 3.5 0 0 1 22 5.5v9A3.5 3.5 0 0 1 18.5 18H14l-3.5 4-3.5-4H5.5A3.5 3.5 0 0 1 2 14.5v-9zm5 3a1 1 0 0 0 0 2h1v1a1 1 0 0 0 2 0v-1.5A1.5 1.5 0 0 0 8.5 8.5H7zm5 0a1 1 0 0 0 0 2h1v1a1 1 0 0 0 2 0v-1.5A1.5 1.5 0 0 0 13.5 8.5H12z"/>
+                        </svg>
+                    </button>
+
+                    </div>
+                    <button id="motion-background-btn" type="button" class="lyric-pill btn-anim is-unavailable" aria-label="Sfondo animato" title="Sfondo animato" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="m10 8 6 4-6 4Z" fill="currentColor" stroke="none"/></svg></button>
+                    <!-- list.bullet — Queue -->
+                    <button id="queue-toggle-btn" class="w-10 h-10 flex items-center justify-center text-white/50 hover:text-white transition-all cursor-pointer btn-anim bg-transparent border-0" title="Coda">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M3.5 6.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm0 7a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm1.5 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zM8 5a1 1 0 0 1 1-1h11a1 1 0 0 1 0 2H9a1 1 0 0 1-1-1zm1 6a1 1 0 0 0 0 2h11a1 1 0 0 0 0-2H9zm0 7a1 1 0 0 0 0 2h11a1 1 0 0 0 0-2H9z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+</body>
+</html>
+

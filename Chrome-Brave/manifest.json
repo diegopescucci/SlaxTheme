@@ -1,0 +1,124 @@
+{
+  "manifest_version": 3,
+  "name": "Slax",
+  "version": "2.0.0",
+  "description": "Personal new tab dashboard with search, shortcuts, weather, and music controls.",
+  "chrome_url_overrides": {
+    "newtab": "index.html"
+  },
+  "permissions": [
+    "storage",
+    "identity",
+    "alarms",
+    "geolocation",
+    "cookies"
+  ],
+  "host_permissions": [
+    "https://api.spotify.com/*",
+    "https://www.musicark.dev/*",
+    "https://api.reccobeats.com/*",
+    "https://accounts.spotify.com/*",
+    "https://*.scdn.co/*",
+    "https://i.scdn.co/*",
+    "https://*.spotifycdn.com/*",
+    "https://images.unsplash.com/*",
+    "https://ipapi.co/*",
+    "https://api.open-meteo.com/*",
+    "https://www.googleapis.com/*",
+    "https://fonts.googleapis.com/*",
+    "https://fonts.gstatic.com/*",
+    "https://lrclib.net/*",
+    "https://lyrics-api.binimum.org/*",
+    "https://lyrics.binimum.org/*",
+    "https://lrc.red/*",
+    "https://www.musixmatch.com/*",
+    "https://s.mxmcdn.net/*",
+    "https://api.coingecko.com/*",
+    "https://www.alphavantage.co/*",
+    "https://api.exchangerate.host/*",
+    "https://geocoding-api.open-meteo.com/*",
+    "https://api.bigdatacloud.net/*",
+    "https://www.instagram.com/*",
+    "https://i.instagram.com/*",
+    "https://api.allorigins.win/*",
+    "https://corsproxy.io/*",
+    "https://www.picuki.com/*",
+    "https://instagram-data-api.p.rapidapi.com/*",
+    "https://www.tiktok.com/*",
+    "https://www.tikwm.com/*",
+    "https://countik.com/*",
+    "https://tokcount.com/*",
+    "https://graph.instagram.com/*",
+    "https://graph.facebook.com/*",
+    "https://api.instagram.com/*",
+    "https://ipwho.is/*",
+    "https://open.er-api.com/*",
+    "https://api.qrserver.com/*",
+    "https://amp-api.music.apple.com/*",
+    "https://api.music.apple.com/*",
+    "https://music.apple.com/*",
+    "https://*.apple.com/*",
+    "https://*.itunes.apple.com/*",
+    "https://*.mzstatic.com/*",
+    "https://canvaz.spotify.com/*",
+    "https://spclient.wg.spotify.com/*",
+    "https://api.musixmatch.com/*",
+    "https://music.youtube.com/*",
+    "https://www.youtube.com/*",
+    "http://127.0.0.1:5191/*",
+    "https://suggestqueries.google.com/*",
+    "https://api.dailyquotes.dev/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "commands": {
+    "slax-play-pause": {
+      "suggested_key": {
+        "default": "Alt+P"
+      },
+      "description": "Play/Pause musica"
+    },
+    "slax-next": {
+      "suggested_key": {
+        "default": "Alt+N"
+      },
+      "description": "Prossimo brano"
+    },
+    "slax-prev": {
+      "suggested_key": {
+        "default": "Alt+B"
+      },
+      "description": "Brano precedente"
+    }
+  },
+  "action": {
+    "default_popup": "quick-menu.html",
+    "default_icon": {
+      "16": "icon-16.png",
+      "48": "icon-48.png",
+      "128": "icon.png"
+    }
+  },
+  "icons": {
+    "16": "icon-16.png",
+    "48": "icon-48.png",
+    "128": "icon.png"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  },
+  "content_scripts": [
+    {
+      "run_at": "document_idle",
+      "matches": [
+        "https://music.youtube.com/*",
+        "https://music.apple.com/*",
+        "https://www.youtube.com/*"
+      ],
+      "js": [
+        "music-bridge.js"
+      ]
+    }
+  ]
+}
